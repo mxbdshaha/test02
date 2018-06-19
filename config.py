@@ -4,7 +4,7 @@ from redis import StrictRedis
 
 class Config(object):
     # 数据库配置
-    SQLALCHEMY_DATABASE_URI ='mysql://root:mysql@127.0.0.1:3306/information02'
+    SQLALCHEMY_DATABASE_URI ='mysql://root:mysql@127.0.0.1:3306/information01'
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     SECRET_KEY ='03pNX+bIhPuo9qS18caOuafDOMnUwSgjCM3ALjaB+yf4jIjuODiE8+kw7GsVcNce'
     # 配置redis
@@ -19,7 +19,7 @@ class Config(object):
     # 设置过期时间,86400是一天，设置的过期时间是两天
     PERMANENT_SESSION_LIFETIME=86400*2
     # 打印日志等级
-    LOG_LEVEL= logging.debug
+    LOG_LEVEL= logging.DEBUG
 
 #    开发环境下的debug
 class Development(Config):
@@ -27,7 +27,7 @@ class Development(Config):
 
 class  Production(Config):
     DEBUG = False
-    LOG_LEVEL = logging.warning
+    LOG_LEVEL = logging.WARNING
 
 class Testing(Config):
     DEBUG =True

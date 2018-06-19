@@ -3,6 +3,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask.ext.session import Session
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.wtf import CSRFProtect
 from redis import StrictRedis
 from config import Config_dict
 
@@ -11,9 +12,9 @@ from config import Config_dict
 db=SQLAlchemy()
 redis_store=None #type:StrictRedis
 
-def Setup(Config_name):
+def Setup(config_name):
     # 设置日志的记录等级
-    logging.basicConfig(level=Config_dict[Config_name].LOG_LEVEL)  # 调试debug级
+    logging.basicConfig(level=Config_dict[config_name].LOG_LEVEL)  # 调试debug级
     # 创建日志记录器，指明日志保存的路径、每个日志文件的最大大小、保存的日志文件个数上限
     file_log_handler = RotatingFileHandler("logs/log", maxBytes=1024 * 1024 * 100, backupCount=10)
     # 创建日志记录的格式 日志等级 输入日志信息的文件名 行数 日志信息
@@ -25,13 +26,17 @@ def Setup(Config_name):
 
 
 def Config_app(config_name):
+    Setup(config_name)
     app = Flask(__name__)
     app.config.from_object(Config_dict[config_name])
     # 数据库实例化对象
     db.init_app(app)
+    # 申明redis_store这个变量是全局变量，我们在视图函数里面就可以调用他
     global redis_store
     redis_store=StrictRedis(host=Config_dict[config_name].redis_host,port=Config_dict[config_name].redis_port)
     Session(app)
+    # 设置CSRFProtect保护
+    CSRFProtect(app)
     # 什么时候调用，时候导入
     from .modules.index import index_blu
     # 将蓝图注册到app里面

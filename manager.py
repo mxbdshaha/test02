@@ -1,7 +1,6 @@
-from flask import session
 from flask_migrate import  Migrate,MigrateCommand
 from flask_script import Manager
-from info import Config_app, db
+from info import Config_app, db,models
 
 app=Config_app('development')
 manager = Manager(app)
