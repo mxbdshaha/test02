@@ -1,14 +1,16 @@
-import logging
+# import logging
 from flask import current_app
-from flask import session
+# from flask import session
+#
+# from info import redis_store
+from flask import render_template
 
-from info import redis_store
 from . import  index_blu
 
 @index_blu.route('/')
 def index():
-    redis_store.set('password','123456789')
-    logging.debug('这是一个测试')
-    session['email']='215468657'
-    current_app.logger.debug('这个是测试代码')
-    return 'index'
+    return render_template('news/index.html')
+
+@index_blu.route('/favicon.ico')
+def favicon():
+    return current_app.send_static_file('news/facicon.ico')
