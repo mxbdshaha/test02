@@ -33,13 +33,17 @@ def Config_app(config_name):
     db.init_app(app)
     # 申明redis_store这个变量是全局变量，我们在视图函数里面就可以调用他
     global redis_store
-    redis_store=StrictRedis(host=Config_dict[config_name].redis_host,port=Config_dict[config_name].redis_port)
+    redis_store=StrictRedis(host=Config_dict[config_name].redis_host,port=Config_dict[config_name].redis_port,decode_responses=True)
     Session(app)
     # 设置CSRFProtect保护
-    CSRFProtect(app)
+    # CSRFProtect(app)
     # 什么时候调用，时候导入
     from .modules.index import index_blu
     # 将蓝图注册到app里面
     app.register_blueprint(index_blu)
+    # 什么时候调用，时候导入
+    from .modules.passport import passport_blu
+    # 将蓝图注册到app里面
+    app.register_blueprint(passport_blu)
 
     return app
